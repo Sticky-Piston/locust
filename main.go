@@ -36,7 +36,6 @@ func main() {
 		Usage: "Run a locust node or communicate with the swarm",
 		Action: func(c *cli.Context) error {
 			if c.Bool("node") {
-
 				done := make(chan bool, 1)
 
 				host := makeNode(done)
@@ -105,6 +104,8 @@ func run(h host.Host, cancel func()) {
 }
 
 func makeNode(done chan bool) *Node {
+	// TODO: handle errors :)
+
 	priv, _, _ := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
 	listen, _ := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
 	host, _ := libp2p.New(

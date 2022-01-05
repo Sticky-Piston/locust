@@ -12,7 +12,7 @@ message MessageData {
     bool gossip = 4;         // true to have receiver peer gossip the message to neighbors
     string nodeId = 5;       // id of node that created the message (not the peer that may have sent it). =base58(multihash(nodePubKey))
     bytes nodePubKey = 6;    // Authoring node Secp256k1 public key (32bytes) - protobufs serielized
-    bytes sign = 7;         // signature of message data + method specific data by message authoring node.
+    bytes sign = 7;          // signature of message data + method specific data by message authoring node.
 }
 
 message PingRequest {

@@ -26,11 +26,11 @@ func NewProfileProtocol(node *Node) *ProfileProtocol {
 }
 
 func (p *ProfileProtocol) onProfileRequest(s network.Stream) {
-
+	// TODO: implement
 }
 
 func (p *ProfileProtocol) onProfileResponse(s network.Stream) {
-
+	// TODO: implement
 }
 
 func (p *ProfileProtocol) Broadcast(peers []peer.AddrInfo) bool {
