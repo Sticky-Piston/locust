@@ -3,8 +3,8 @@ package main
 import (
 	"context"
 	"fmt"
+	"locust/pb"
 	"log"
-	"peerwork/pb"
 	"time"
 
 	"github.com/libp2p/go-libp2p-core/crypto"
@@ -16,11 +16,12 @@ import (
 	"github.com/gogo/protobuf/proto"
 )
 
-const clientVersion = "peerwork-node/0.0.1"
+const clientVersion = "locust-node/0.0.1"
 
 type Node struct {
 	host.Host
 	*PingProtocol
+	*ProfileProtocol
 }
 
 func NewNode(host host.Host, done chan bool) *Node {
@@ -109,7 +110,7 @@ func (n *Node) NewMessageData(messageId string, gossip bool) *pb.MessageData {
 func (n *Node) sendProtoMessage(id peer.ID, p protocol.ID, data proto.Message) bool {
 	s, err := n.NewStream(context.Background(), id, p)
 	if err != nil {
-		log.Println(err)
+		log.Println("Failed to send message:", err)
 		return false
 	}
 	defer s.Close()
@@ -117,7 +118,7 @@ func (n *Node) sendProtoMessage(id peer.ID, p protocol.ID, data proto.Message) b
 	writer := ggio.NewFullWriter(s)
 	err = writer.WriteMsg(data)
 	if err != nil {
-		log.Println(err)
+		log.Println("Failed to write message:", err)
 		s.Reset()
 		return false
 	}

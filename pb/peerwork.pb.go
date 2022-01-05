@@ -227,6 +227,124 @@ func (x *PingResponse) GetMessage() string {
 	return ""
 }
 
+type ProfileRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
+	Title       string       `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
+	Summary     string       `protobuf:"bytes,3,opt,name=summary,proto3" json:"summary,omitempty"`
+}
+
+func (x *ProfileRequest) Reset() {
+	*x = ProfileRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_peerwork_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileRequest) ProtoMessage() {}
+
+func (x *ProfileRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_peerwork_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileRequest.ProtoReflect.Descriptor instead.
+func (*ProfileRequest) Descriptor() ([]byte, []int) {
+	return file_pb_peerwork_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ProfileRequest) GetMessageData() *MessageData {
+	if x != nil {
+		return x.MessageData
+	}
+	return nil
+}
+
+func (x *ProfileRequest) GetTitle() string {
+	if x != nil {
+		return x.Title
+	}
+	return ""
+}
+
+func (x *ProfileRequest) GetSummary() string {
+	if x != nil {
+		return x.Summary
+	}
+	return ""
+}
+
+type ProfileResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
+	Message     string       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+}
+
+func (x *ProfileResponse) Reset() {
+	*x = ProfileResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_pb_peerwork_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileResponse) ProtoMessage() {}
+
+func (x *ProfileResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_pb_peerwork_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileResponse.ProtoReflect.Descriptor instead.
+func (*ProfileResponse) Descriptor() ([]byte, []int) {
+	return file_pb_peerwork_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ProfileResponse) GetMessageData() *MessageData {
+	if x != nil {
+		return x.MessageData
+	}
+	return nil
+}
+
+func (x *ProfileResponse) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_pb_peerwork_proto protoreflect.FileDescriptor
 
 var file_pb_peerwork_proto_rawDesc = []byte{
@@ -255,8 +373,21 @@ var file_pb_peerwork_proto_rawDesc = []byte{
 	0x32, 0x0f, 0x2e, 0x70, 0x62, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74,
 	0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x18,
 	0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52,
-	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x07, 0x5a, 0x05, 0x2e, 0x2e, 0x2f, 0x70,
-	0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x73, 0x0a, 0x0e, 0x50, 0x72, 0x6f, 0x66,
+	0x69, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x31, 0x0a, 0x0b, 0x6d, 0x65,
+	0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32,
+	0x0f, 0x2e, 0x70, 0x62, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61,
+	0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x14, 0x0a,
+	0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74, 0x69,
+	0x74, 0x6c, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x18, 0x03,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x22, 0x5e, 0x0a,
+	0x0f, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65,
+	0x12, 0x31, 0x0a, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18,
+	0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x0f, 0x2e, 0x70, 0x62, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
+	0x61, 0x74, 0x61, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x42, 0x07, 0x5a,
+	0x05, 0x2e, 0x2e, 0x2f, 0x70, 0x62, 0x62, 0x06, 0x70, 0x72, 0x6f, 0x74, 0x6f, 0x33,
 }
 
 var (
@@ -271,20 +402,24 @@ func file_pb_peerwork_proto_rawDescGZIP() []byte {
 	return file_pb_peerwork_proto_rawDescData
 }
 
-var file_pb_peerwork_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_pb_peerwork_proto_msgTypes = make([]protoimpl.MessageInfo, 5)
 var file_pb_peerwork_proto_goTypes = []interface{}{
-	(*MessageData)(nil),  // 0: pb.MessageData
-	(*PingRequest)(nil),  // 1: pb.PingRequest
-	(*PingResponse)(nil), // 2: pb.PingResponse
+	(*MessageData)(nil),     // 0: pb.MessageData
+	(*PingRequest)(nil),     // 1: pb.PingRequest
+	(*PingResponse)(nil),    // 2: pb.PingResponse
+	(*ProfileRequest)(nil),  // 3: pb.ProfileRequest
+	(*ProfileResponse)(nil), // 4: pb.ProfileResponse
 }
 var file_pb_peerwork_proto_depIdxs = []int32{
 	0, // 0: pb.PingRequest.messageData:type_name -> pb.MessageData
 	0, // 1: pb.PingResponse.messageData:type_name -> pb.MessageData
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 2: pb.ProfileRequest.messageData:type_name -> pb.MessageData
+	0, // 3: pb.ProfileResponse.messageData:type_name -> pb.MessageData
+	4, // [4:4] is the sub-list for method output_type
+	4, // [4:4] is the sub-list for method input_type
+	4, // [4:4] is the sub-list for extension type_name
+	4, // [4:4] is the sub-list for extension extendee
+	0, // [0:4] is the sub-list for field type_name
 }
 
 func init() { file_pb_peerwork_proto_init() }
@@ -329,6 +464,30 @@ func file_pb_peerwork_proto_init() {
 				return nil
 			}
 		}
+		file_pb_peerwork_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_pb_peerwork_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
 	}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
@@ -336,7 +495,7 @@ func file_pb_peerwork_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_pb_peerwork_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   5,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

@@ -3,13 +3,13 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"locust/pb"
 	"log"
-	"peerwork/pb"
 
-	"github.com/gogo/protobuf/proto"
 	"github.com/google/uuid"
-	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"google.golang.org/protobuf/proto"
 )
 
 const pingRequest = "/ping/pingreq/0.0.1"
@@ -42,7 +42,7 @@ func (p *PingProtocol) onPingRequest(s network.Stream) {
 
 	err = proto.Unmarshal(buf, data)
 	if err != nil {
-		log.Println(err)
+		log.Println("Failed to unmarshal request:", err)
 		return
 	}
 
@@ -114,8 +114,8 @@ func (p *PingProtocol) onPingResponse(s network.Stream) {
 	p.done <- true
 }
 
-func (p *PingProtocol) Ping(host host.Host) bool {
-	log.Printf("%s: Sending ping to: %s....", p.node.ID(), host.ID())
+func (p *PingProtocol) Ping(peer peer.AddrInfo) bool {
+	log.Printf("%s: Sending ping to: %s....", p.node.ID(), peer.ID)
 
 	// create message data
 	req := &pb.PingRequest{MessageData: p.node.NewMessageData(uuid.New().String(), false),
@@ -131,13 +131,13 @@ func (p *PingProtocol) Ping(host host.Host) bool {
 	// add the signature to the message
 	req.MessageData.Sign = signature
 
-	ok := p.node.sendProtoMessage(host.ID(), pingRequest, req)
+	ok := p.node.sendProtoMessage(peer.ID, pingRequest, req)
 	if !ok {
 		return false
 	}
 
 	// store ref request so response handler has access to it
 	p.requests[req.MessageData.Id] = req
-	log.Printf("%s: Ping to: %s was sent. Message Id: %s, Message: %s", p.node.ID(), host.ID(), req.MessageData.Id, req.Message)
+	log.Printf("%s: Ping to: %s was sent. Message Id: %s, Message: %s", p.node.ID(), peer.ID, req.MessageData.Id, req.Message)
 	return true
 }

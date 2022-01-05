@@ -26,3 +26,16 @@ message PingResponse {
 
     string message = 2;
 }
+
+message ProfileRequest {
+    MessageData messageData = 1;
+
+    string title = 2;
+    string summary = 3;
+}
+
+message ProfileResponse {
+    MessageData messageData = 1;
+
+    string message = 2;
+}
