@@ -33,6 +33,8 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 					continue
 				}
 
+				log.Println("Found peer:", peer.ID)
+
 				if host.Network().Connectedness(peer.ID) != network.Connected {
 					_, err = host.Network().DialPeer(ctx, peer.ID)
 

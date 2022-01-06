@@ -10,8 +10,6 @@ import (
 	ma "github.com/multiformats/go-multiaddr"
 )
 
-const clientVersion = "locust-node/0.0.1"
-
 type Node struct {
 	host.Host
 }
@@ -20,10 +18,10 @@ func NewNode() *Node {
 	// Create a new host
 	host := makeHost()
 
+	//profileProtocol := handlers.NewProfileProtocol()
+
 	// Create a new node
 	node := &Node{Host: host}
-
-	// TODO: assign protocol stream handlers here
 
 	return node
 }

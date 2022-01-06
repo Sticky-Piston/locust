@@ -3,6 +3,8 @@ package p2p
 import (
 	"context"
 	"fmt"
+	"locust/domain"
+
 	"log"
 	"os"
 	"os/signal"
@@ -10,14 +12,16 @@ import (
 )
 
 type P2PImpl struct {
-	Node *Node
+	Node           *Node
+	ProfileUsecase domain.ProfileUsecase
 }
 
-func NewP2PProtocol() *P2PImpl {
+func NewP2PProtocol(profileUsecase domain.ProfileUsecase) *P2PImpl {
 	node := NewNode()
 
 	return &P2PImpl{
-		Node: node,
+		Node:           node,
+		ProfileUsecase: profileUsecase,
 	}
 }
 
