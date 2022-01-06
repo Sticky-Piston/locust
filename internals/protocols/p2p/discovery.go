@@ -1,4 +1,4 @@
-package main
+package p2p
 
 import (
 	"context"
@@ -38,12 +38,13 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 
 					log.Println("Discovered peer with ID:", peer.ID)
 
-					if err != nil {
-						continue
-					}
+				}
+				if err != nil {
+					log.Println(err)
+					continue
 				}
 			}
-
 		}
+
 	}
 }

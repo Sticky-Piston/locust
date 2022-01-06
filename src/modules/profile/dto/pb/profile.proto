@@ -1,7 +1,7 @@
 syntax = "proto3";
-package pb;
+package dto;
 
-option go_package = "../pb";
+option go_package = "../dto";
 
 // designed to be shared between all app protocols
 message MessageData {
@@ -15,27 +15,15 @@ message MessageData {
     bytes sign = 7;          // signature of message data + method specific data by message authoring node.
 }
 
-message PingRequest {
-    MessageData messageData = 1;
-
-    string message = 2;
-}
-
-message PingResponse {
-    MessageData messageData = 1;
-
-    string message = 2;
-}
-
 message ProfileRequest {
     MessageData messageData = 1;
 
-    string title = 2;
-    string summary = 3;
+    string message = 2;
 }
 
 message ProfileResponse {
     MessageData messageData = 1;
 
-    string message = 2;
+    string title = 2;
+    string summary = 3;
 }

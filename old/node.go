@@ -27,6 +27,7 @@ type Node struct {
 func NewNode(host host.Host, done chan bool) *Node {
 	node := &Node{Host: host}
 	node.PingProtocol = NewPingProtocol(node, done)
+	node.ProfileProtocol = NewProfileProtocol(node)
 
 	return node
 }
