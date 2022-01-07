@@ -5,18 +5,16 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"locust/internal/p2p"
-	"locust/src/profile/repository/badgerRepository"
-	"locust/src/profile/usecase"
+	"context"
+	"fmt"
+	"locust/core"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
 
-	"github.com/dgraph-io/badger"
 	"github.com/spf13/cobra"
 )
-
-var peer string
-var rendezvous string
-var database string
 
 // nodeCmd represents the node command
 var nodeCmd = &cobra.Command{
@@ -31,23 +29,49 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// Open the Badger database located in the /tmp/badger directory.
 		// It will be created if it doesn't exist.
-		db, err := badger.Open(badger.DefaultOptions(database))
+
+		node := core.NewNode()
+
+		log.Printf("Host ID: %s", node.ID().Pretty())
+		log.Printf("Connect to me on:")
+		for _, addr := range node.Addrs() {
+			log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
+		}
+
+		ctx, cancel := context.WithCancel(context.Background())
+
+		var discoveryPeers core.AddrList
+		discoveryPeers.Set(peerString)
+
+		dht, err := core.NewDHT(ctx, node, discoveryPeers)
 		if err != nil {
 			log.Fatal(err)
 		}
-		defer db.Close()
 
-		profileRepository := badgerRepository.NewProfileRepository(db)
-		profileUsecase := usecase.NewProfileUsecase(profileRepository)
+		go core.Discover(ctx, node, dht, rendezvous)
 
-		p2p.NewP2PProtocol(profileUsecase).Run(peer, rendezvous)
+		c := make(chan os.Signal, 1)
+
+		signal.Notify(c, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
+		<-c
+
+		fmt.Println("Exiting...")
+
+		cancel()
+
+		if err := node.Close(); err != nil {
+			panic(err)
+		}
+
+		os.Exit(0)
+
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(nodeCmd)
 
-	nodeCmd.Flags().StringVarP(&peer, "peer", "p", "", "Peer to connect to")
+	nodeCmd.Flags().StringVarP(&peerString, "peer", "p", "", "Peer to connect to")
 	nodeCmd.Flags().StringVarP(&rendezvous, "rendezvous", "r", "locust/network", "Rendezvous string")
 	nodeCmd.Flags().StringVarP(&database, "database", "d", "/tmp/locust", "Badger database file location")
 

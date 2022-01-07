@@ -5,7 +5,9 @@ go 1.16
 require (
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/badger/v3 v3.2103.2 // indirect
+	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/protobuf v1.5.2 // indirect
+	github.com/google/uuid v1.3.0 // indirect
 	github.com/gxed/hashland/keccakpg v0.0.1 // indirect
 	github.com/gxed/hashland/murmur3 v0.0.1 // indirect
 	github.com/ipfs/go-todocounter v0.0.1 // indirect

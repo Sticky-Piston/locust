@@ -1,4 +1,4 @@
-package p2p
+package core
 
 import (
 	"strings"
@@ -6,9 +6,9 @@ import (
 	"github.com/multiformats/go-multiaddr"
 )
 
-type addrList []multiaddr.Multiaddr
+type AddrList []multiaddr.Multiaddr
 
-func (al *addrList) String() string {
+func (al *AddrList) String() string {
 	strs := make([]string, len(*al))
 	for i, addr := range *al {
 		strs[i] = addr.String()
@@ -16,7 +16,7 @@ func (al *addrList) String() string {
 	return strings.Join(strs, ",")
 }
 
-func (al *addrList) Set(value string) error {
+func (al *AddrList) Set(value string) error {
 	addr, err := multiaddr.NewMultiaddr(value)
 	if err != nil {
 		return err

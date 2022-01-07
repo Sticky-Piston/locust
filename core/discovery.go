@@ -1,4 +1,4 @@
-package p2p
+package core
 
 import (
 	"context"
@@ -16,7 +16,7 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 	ticker := time.NewTicker(time.Second * 1)
 	defer ticker.Stop()
 
-	host := node.Host
+	//host := node.Host
 
 	for {
 		select {
@@ -29,21 +29,28 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 			}
 
 			for _, peer := range peers {
-				if peer.ID == host.ID() {
+				if peer.ID == node.ID() {
 					continue
 				}
 
 				log.Println("Found peer:", peer.ID)
 
-				if host.Network().Connectedness(peer.ID) != network.Connected {
-					_, err = host.Network().DialPeer(ctx, peer.ID)
+				// addrs := node.Peerstore().Addrs(peer.ID)
+				// if len(addrs) == 0 {
+				// 	log.Println("Discovered peer with ID:", peer.ID)
+				// 	node.Peerstore().AddAddrs(peer.ID, peer.Addrs, peerstore.PermanentAddrTTL)
+				// } else {
+				// 	log.Println("I already know peer with ID:", peer.ID)
+				// }
 
-					log.Println("Discovered peer with ID:", peer.ID)
+				if node.Network().Connectedness(peer.ID) != network.Connected {
+					_, err = node.Network().DialPeer(ctx, peer.ID)
+					if err != nil {
+						node.Peerstore().RemovePeer(peer.ID)
+						continue
+					}
+					//log.Println("Discovered peer with ID:", peer.ID)
 
-				}
-				if err != nil {
-					log.Println(err)
-					continue
 				}
 			}
 		}
