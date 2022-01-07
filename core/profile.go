@@ -51,11 +51,11 @@ func (p *ProfileProtocol) OnProfileRequest(s network.Stream) {
 
 	// log.Println(data.MessageData.Sign)
 
-	// valid := p.node.AuthenticateMessage(data, data.MessageData)
-	// if !valid {
-	// 	log.Println("Failed to authenticate message")
-	// 	return
-	// }
+	valid := p.node.AuthenticateMessage(data, data.MessageData)
+	if !valid {
+		log.Println("Failed to authenticate message")
+		return
+	}
 
 	// TODO
 }
