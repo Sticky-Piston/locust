@@ -6,7 +6,7 @@ package cmd
 
 import (
 	"context"
-	"locust/core"
+	"locust/internals/p2p"
 	"log"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -24,7 +24,7 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		node := core.NewNode()
+		node := p2p.NewNode()
 
 		log.Printf("Host ID: %s", node.ID().Pretty())
 		log.Printf("Connect to me on:")
@@ -34,15 +34,15 @@ to quickly create a Cobra application.`,
 
 		ctx := context.Background()
 
-		var discoveryPeers core.AddrList
+		var discoveryPeers p2p.AddrList
 		discoveryPeers.Set(peerString)
 
-		dht, err := core.NewDHT(ctx, node, discoveryPeers)
+		dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		go core.Discover(ctx, node, dht, rendezvous)
+		go p2p.Discover(ctx, node, dht, rendezvous)
 
 		peerAddr, err := peer.AddrInfoFromString(peerString)
 		if err != nil {

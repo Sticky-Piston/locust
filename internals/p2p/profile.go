@@ -1,4 +1,4 @@
-package core
+package p2p
 
 import (
 	"fmt"
@@ -91,8 +91,6 @@ func (p *ProfileProtocol) GetProfileFromPeer(peer *peer.AddrInfo) (*generated.Pr
 
 	// add the signature to the message
 	req.MessageData.Sign = signature
-
-	//log.Println(req.MessageData.Sign)
 
 	ok := p.node.SendProtoMessage(peer.ID, profileRequest, req)
 	if !ok {
