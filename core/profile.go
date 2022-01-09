@@ -49,15 +49,26 @@ func (p *ProfileProtocol) OnProfileRequest(s network.Stream) {
 
 	log.Printf("%s: Received profile request from %s. Message: %s", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.Message)
 
-	// log.Println(data.MessageData.Sign)
-
 	valid := p.node.AuthenticateMessage(data, data.MessageData)
 	if !valid {
 		log.Println("Failed to authenticate message")
 		return
 	}
 
-	// TODO
+	// TODO IMPLEMENT PROFILE STORAGE
+	profile := &protocols.ProfileResponse{
+		MessageData: p.node.NewMessageData(uuid.New().String(), false),
+		Title:       "Test titel",
+		Summary:     "Test summary",
+	}
+
+	ok := p.node.SendProtoMessage(s.Conn().RemotePeer(), profileResponse, profile)
+	if !ok {
+		log.Println("Failed to send message")
+		return
+	}
+
+	log.Println("Send profile to:", s.Conn().RemotePeer())
 }
 
 func (p *ProfileProtocol) OnProfileResponse(s network.Stream) {
