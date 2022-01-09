@@ -16,8 +16,6 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 	ticker := time.NewTicker(time.Second * 1)
 	defer ticker.Stop()
 
-	//host := node.Host
-
 	for {
 		select {
 		case <-ctx.Done():
@@ -33,24 +31,12 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 					continue
 				}
 
-				log.Println("Found peer:", peer.ID)
-
-				// addrs := node.Peerstore().Addrs(peer.ID)
-				// if len(addrs) == 0 {
-				// 	log.Println("Discovered peer with ID:", peer.ID)
-				// 	node.Peerstore().AddAddrs(peer.ID, peer.Addrs, peerstore.PermanentAddrTTL)
-				// } else {
-				// 	log.Println("I already know peer with ID:", peer.ID)
-				// }
-
 				if node.Network().Connectedness(peer.ID) != network.Connected {
 					_, err = node.Network().DialPeer(ctx, peer.ID)
 					if err != nil {
 						node.Peerstore().RemovePeer(peer.ID)
 						continue
 					}
-					//log.Println("Discovered peer with ID:", peer.ID)
-
 				}
 			}
 		}
