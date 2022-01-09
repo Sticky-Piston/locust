@@ -1,7 +1,7 @@
 syntax = "proto3";
-package protocols;
+package generated;
 
-option go_package = "../protocols";
+option go_package = "./generated";
 
 // designed to be shared between all app protocols
 message MessageData {

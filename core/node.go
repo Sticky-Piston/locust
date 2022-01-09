@@ -3,7 +3,7 @@ package core
 import (
 	"context"
 	"fmt"
-	"locust/protocols"
+	"locust/protocols/generated"
 	"log"
 	"time"
 
@@ -14,6 +14,7 @@ import (
 	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/protocol"
+	noise "github.com/libp2p/go-libp2p-noise"
 
 	ggio "github.com/gogo/protobuf/io"
 	"github.com/gogo/protobuf/proto"
@@ -33,6 +34,7 @@ func NewNode() *Node {
 	host, _ := libp2p.New(
 		libp2p.ListenAddrs(listen),
 		libp2p.Identity(priv),
+		libp2p.Security(noise.ID, noise.New),
 	)
 
 	node := &Node{
@@ -58,7 +60,7 @@ func (n *Node) SignData(data []byte) ([]byte, error) {
 
 }
 
-func (n *Node) AuthenticateMessage(message proto.Message, data *protocols.MessageData) bool {
+func (n *Node) AuthenticateMessage(message proto.Message, data *generated.MessageData) bool {
 	log.Println("Authenticating message")
 
 	sign := data.Sign
@@ -108,13 +110,13 @@ func (n *Node) verifyData(data []byte, signature []byte, peerId peer.ID, pubKeyD
 	return res
 }
 
-func (n *Node) NewMessageData(messageId string, gossip bool) *protocols.MessageData {
+func (n *Node) NewMessageData(messageId string, gossip bool) *generated.MessageData {
 	nodePubKey, err := crypto.MarshalPublicKey(n.Peerstore().PubKey(n.ID()))
 	if err != nil {
 		panic("Failed to get public key for sender from local peer store.")
 	}
 
-	return &protocols.MessageData{ClientVersion: clientVersion,
+	return &generated.MessageData{ClientVersion: clientVersion,
 		NodeId:     peer.Encode(n.ID()),
 		NodePubKey: nodePubKey,
 		Timestamp:  time.Now().Unix(),
@@ -131,9 +133,8 @@ func (n *Node) SendProtoMessage(id peer.ID, p protocol.ID, data proto.Message) b
 	defer s.Close()
 
 	writer := ggio.NewFullWriter(s)
-	//writer := bufio.NewWriter(s)
+
 	err = writer.WriteMsg(data)
-	//writer.Write(data)
 	if err != nil {
 		log.Println("Failed to write message:", err)
 		s.Reset()

@@ -22,6 +22,7 @@ require (
 	github.com/libp2p/go-libp2p-kad-dht v0.15.0 // indirect
 	github.com/libp2p/go-libp2p-metrics v0.0.1 // indirect
 	github.com/libp2p/go-libp2p-net v0.0.2 // indirect
+	github.com/libp2p/go-libp2p-noise v0.3.0 // indirect
 	github.com/libp2p/go-libp2p-routing v0.0.1 // indirect
 	github.com/libp2p/go-libp2p-transport v0.0.4 // indirect
 	github.com/libp2p/go-testutil v0.0.1 // indirect

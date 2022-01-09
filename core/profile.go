@@ -3,7 +3,7 @@ package core
 import (
 	"fmt"
 	"io/ioutil"
-	"locust/protocols"
+	"locust/protocols/generated"
 	"log"
 	"time"
 
@@ -18,11 +18,11 @@ const profileResponse = "/profile/profileresp/0.0.1"
 
 type ProfileProtocol struct {
 	node     *Node
-	requests map[string]*protocols.ProfileRequest
+	requests map[string]*generated.ProfileRequest
 }
 
 func NewProfileProtocol(node *Node) *ProfileProtocol {
-	p := &ProfileProtocol{node: node, requests: make(map[string]*protocols.ProfileRequest)}
+	p := &ProfileProtocol{node: node, requests: make(map[string]*generated.ProfileRequest)}
 
 	node.SetStreamHandler(profileRequest, p.OnProfileRequest)
 	node.SetStreamHandler(profileResponse, p.OnProfileResponse)
@@ -33,7 +33,7 @@ func NewProfileProtocol(node *Node) *ProfileProtocol {
 func (p *ProfileProtocol) OnProfileRequest(s network.Stream) {
 	log.Println("Executing profile request")
 
-	data := &protocols.ProfileRequest{}
+	data := &generated.ProfileRequest{}
 	buf, err := ioutil.ReadAll(s)
 	if err != nil {
 		s.Reset()
@@ -56,7 +56,7 @@ func (p *ProfileProtocol) OnProfileRequest(s network.Stream) {
 	}
 
 	// TODO IMPLEMENT PROFILE STORAGE
-	profile := &protocols.ProfileResponse{
+	profile := &generated.ProfileResponse{
 		MessageData: p.node.NewMessageData(uuid.New().String(), false),
 		Title:       "Test titel",
 		Summary:     "Test summary",
@@ -76,8 +76,8 @@ func (p *ProfileProtocol) OnProfileResponse(s network.Stream) {
 	// TODO
 }
 
-func (p *ProfileProtocol) GetProfileFromPeer(peer *peer.AddrInfo) (*protocols.ProfileResponse, error) {
-	req := &protocols.ProfileRequest{
+func (p *ProfileProtocol) GetProfileFromPeer(peer *peer.AddrInfo) (*generated.ProfileResponse, error) {
+	req := &generated.ProfileRequest{
 		MessageData: p.node.NewMessageData(uuid.New().String(), false),
 		Message:     fmt.Sprintf("Profile request from %s", p.node.ID()),
 	}
@@ -105,5 +105,5 @@ func (p *ProfileProtocol) GetProfileFromPeer(peer *peer.AddrInfo) (*protocols.Pr
 
 	time.Sleep(30 * time.Second)
 
-	return &protocols.ProfileResponse{}, nil
+	return &generated.ProfileResponse{}, nil
 }
