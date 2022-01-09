@@ -24,8 +24,6 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		// Open the Badger database located in the /tmp/badger directory.
-		// It will be created if it doesn't exist.
 		node := core.NewNode()
 
 		log.Printf("Host ID: %s", node.ID().Pretty())
