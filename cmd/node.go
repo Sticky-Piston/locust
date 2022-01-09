@@ -7,8 +7,9 @@ package cmd
 import (
 	"context"
 	"fmt"
-	"locust/internals/p2p"
-	"locust/internals/utility"
+	"locust/internal/helpers"
+	"locust/internal/p2p"
+	"locust/server"
 	"log"
 	"os"
 	"os/signal"
@@ -28,7 +29,12 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		node := p2p.NewNode()
+		host, err := p2p.NewHost()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		node := server.NewNode(&host)
 
 		log.Printf("Host ID: %s", node.ID().Pretty())
 		log.Printf("Connect to me on:")
@@ -38,15 +44,15 @@ to quickly create a Cobra application.`,
 
 		ctx, cancel := context.WithCancel(context.Background())
 
-		var discoveryPeers utility.AddrList
+		var discoveryPeers helpers.AddrList
 		discoveryPeers.Set(peerString)
 
-		dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
+		dht, err := server.NewDHT(ctx, node, discoveryPeers)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		go p2p.Discover(ctx, node, dht, rendezvous)
+		go server.Discover(ctx, node, dht, rendezvous)
 
 		c := make(chan os.Signal, 1)
 

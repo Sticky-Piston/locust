@@ -7,8 +7,8 @@ import (
 	"log"
 	"time"
 
-	ma "github.com/multiformats/go-multiaddr"
-
+	ggio "github.com/gogo/protobuf/io"
+	"github.com/gogo/protobuf/proto"
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
@@ -16,37 +16,43 @@ import (
 	"github.com/libp2p/go-libp2p-core/protocol"
 	noise "github.com/libp2p/go-libp2p-noise"
 
-	ggio "github.com/gogo/protobuf/io"
-	"github.com/gogo/protobuf/proto"
+	ma "github.com/multiformats/go-multiaddr"
 )
 
 const clientVersion = "locust/0.0.1"
 
-type Node struct {
+type P2PHost struct {
 	host.Host
-	*ProfileProtocol
 }
 
-func NewNode() *Node {
-	// TODO: handle errors :)
-	priv, _, _ := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
-	listen, _ := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
-	host, _ := libp2p.New(
+func NewHost() (P2PHost, error) {
+	// TODO: handle errors in a cleaner way :)
+	priv, _, err := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
+	if err != nil {
+		log.Fatal(err)
+		return P2PHost{}, err
+	}
+
+	listen, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
+	if err != nil {
+		log.Fatal(err)
+		return P2PHost{}, err
+	}
+
+	host, err := libp2p.New(
 		libp2p.ListenAddrs(listen),
 		libp2p.Identity(priv),
 		libp2p.Security(noise.ID, noise.New),
 	)
-
-	node := &Node{
-		Host: host,
+	if err != nil {
+		log.Fatal(err)
+		return P2PHost{}, err
 	}
 
-	node.ProfileProtocol = NewProfileProtocol(node)
-
-	return node
+	return P2PHost{host}, nil
 }
 
-func (n *Node) SignProtoMessage(message proto.Message) ([]byte, error) {
+func (n *P2PHost) SignProtoMessage(message proto.Message) ([]byte, error) {
 	data, err := proto.Marshal(message)
 	if err != nil {
 		return nil, err
@@ -54,13 +60,13 @@ func (n *Node) SignProtoMessage(message proto.Message) ([]byte, error) {
 	return n.SignData(data)
 }
 
-func (n *Node) SignData(data []byte) ([]byte, error) {
+func (n *P2PHost) SignData(data []byte) ([]byte, error) {
 	key := n.Peerstore().PrivKey(n.ID())
 	return key.Sign(data)
 
 }
 
-func (n *Node) AuthenticateMessage(message proto.Message, data *generated.MessageData) bool {
+func (n *P2PHost) AuthenticateMessage(message proto.Message, data *generated.MessageData) bool {
 	log.Println("Authenticating message")
 
 	sign := data.Sign
@@ -83,7 +89,7 @@ func (n *Node) AuthenticateMessage(message proto.Message, data *generated.Messag
 	return n.verifyData(bin, []byte(sign), peerId, data.NodePubKey)
 }
 
-func (n *Node) verifyData(data []byte, signature []byte, peerId peer.ID, pubKeyData []byte) bool {
+func (n *P2PHost) verifyData(data []byte, signature []byte, peerId peer.ID, pubKeyData []byte) bool {
 	key, err := crypto.UnmarshalPublicKey(pubKeyData)
 	if err != nil {
 		log.Println(err, "Failed to extract key from message key data")
@@ -110,7 +116,7 @@ func (n *Node) verifyData(data []byte, signature []byte, peerId peer.ID, pubKeyD
 	return res
 }
 
-func (n *Node) NewMessageData(messageId string, gossip bool) *generated.MessageData {
+func (n *P2PHost) NewMessageData(messageId string, gossip bool) *generated.MessageData {
 	nodePubKey, err := crypto.MarshalPublicKey(n.Peerstore().PubKey(n.ID()))
 	if err != nil {
 		panic("Failed to get public key for sender from local peer store.")
@@ -124,7 +130,7 @@ func (n *Node) NewMessageData(messageId string, gossip bool) *generated.MessageD
 		Gossip:     gossip}
 }
 
-func (n *Node) SendProtoMessage(id peer.ID, p protocol.ID, data proto.Message) bool {
+func (n *P2PHost) SendProtoMessage(id peer.ID, p protocol.ID, data proto.Message) bool {
 	s, err := n.NewStream(context.Background(), id, p)
 	if err != nil {
 		log.Println("Failed to send message:", err)

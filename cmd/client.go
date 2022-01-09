@@ -5,12 +5,6 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"context"
-	"locust/internals/p2p"
-	"locust/internals/utility"
-	"log"
-
-	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/spf13/cobra"
 )
 
@@ -25,32 +19,41 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
-		node := p2p.NewNode()
+		// // TODO: handle errors :)
+		// priv, _, _ := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
+		// listen, _ := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
+		// host, _ := libp2p.New(
+		// 	libp2p.ListenAddrs(listen),
+		// 	libp2p.Identity(priv),
+		// 	libp2p.Security(noise.ID, noise.New),
+		// )
 
-		log.Printf("Host ID: %s", node.ID().Pretty())
-		log.Printf("Connect to me on:")
-		for _, addr := range node.Addrs() {
-			log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
-		}
+		// node := p2p.NewNode(host)
 
-		ctx := context.Background()
+		// log.Printf("Host ID: %s", node.ID().Pretty())
+		// log.Printf("Connect to me on:")
+		// for _, addr := range node.Addrs() {
+		// 	log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
+		// }
 
-		var discoveryPeers utility.AddrList
-		discoveryPeers.Set(peerString)
+		// ctx := context.Background()
 
-		dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// var discoveryPeers utility.AddrList
+		// discoveryPeers.Set(peerString)
 
-		go p2p.Discover(ctx, node, dht, rendezvous)
+		// dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
 
-		peerAddr, err := peer.AddrInfoFromString(peerString)
-		if err != nil {
-			log.Fatal(err)
-		}
+		// go p2p.Discover(ctx, node, dht, rendezvous)
 
-		node.ProfileProtocol.GetProfileFromPeer(peerAddr)
+		// peerAddr, err := peer.AddrInfoFromString(peerString)
+		// if err != nil {
+		// 	log.Fatal(err)
+		// }
+
+		// node.ProfileProtocol.GetProfileFromPeer(peerAddr)
 	},
 }
 
