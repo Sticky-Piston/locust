@@ -1,3 +1,5 @@
+all: clean generate build
+
 generate:
 	protoc -I=. --go_out=./protocols ./protocols/locust.proto
 
@@ -6,3 +8,6 @@ run:
 
 build:
 	go build
+
+clean:
+	rm -rf ./protocols/generated/*
