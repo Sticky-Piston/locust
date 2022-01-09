@@ -7,6 +7,7 @@ package cmd
 import (
 	"context"
 	"locust/internals/p2p"
+	"locust/internals/utility"
 	"log"
 
 	"github.com/libp2p/go-libp2p-core/peer"
@@ -34,7 +35,7 @@ to quickly create a Cobra application.`,
 
 		ctx := context.Background()
 
-		var discoveryPeers p2p.AddrList
+		var discoveryPeers utility.AddrList
 		discoveryPeers.Set(peerString)
 
 		dht, err := p2p.NewDHT(ctx, node, discoveryPeers)

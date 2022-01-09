@@ -8,6 +8,7 @@ import (
 	"context"
 	"fmt"
 	"locust/internals/p2p"
+	"locust/internals/utility"
 	"log"
 	"os"
 	"os/signal"
@@ -37,7 +38,7 @@ to quickly create a Cobra application.`,
 
 		ctx, cancel := context.WithCancel(context.Background())
 
-		var discoveryPeers p2p.AddrList
+		var discoveryPeers utility.AddrList
 		discoveryPeers.Set(peerString)
 
 		dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
