@@ -33,7 +33,7 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// open a new index
 		mapping := bleve.NewIndexMapping()
-		index, err := bleve.New("locust.bleve", mapping)
+		index, err := bleve.New("/tmp/locust.bleve", mapping)
 		if err != nil {
 			log.Fatal(err)
 			return
