@@ -10,11 +10,13 @@ import (
 	"locust/internal/helpers"
 	"locust/internal/p2p"
 	"locust/server"
+	bleveProfileRepository "locust/service/profile/repository/bleve"
 	"log"
 	"os"
 	"os/signal"
 	"syscall"
 
+	"github.com/blevesearch/bleve/v2"
 	"github.com/spf13/cobra"
 )
 
@@ -29,6 +31,16 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// open a new index
+		mapping := bleve.NewIndexMapping()
+		index, err := bleve.New("locust.bleve", mapping)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
+		bleveProfileRepository.NewBleveProfileRepository(&index)
+
 		host, err := p2p.NewHost()
 		if err != nil {
 			log.Fatal(err)

@@ -2,9 +2,9 @@ package server
 
 import (
 	"fmt"
-	"locust/handlers"
 	"locust/internal/helpers"
 	"locust/internal/p2p"
+	"locust/rpc"
 	"log"
 
 	"github.com/libp2p/go-libp2p-core/protocol"
@@ -17,13 +17,13 @@ type Node struct {
 func NewNode(host *p2p.P2PHost) *Node {
 	node := &Node{P2PHost: host}
 
-	profileHandler := handlers.NewProfileHandler(node.P2PHost)
+	profileHandler := rpc.NewProfileHandler(node.P2PHost)
 	node.RegisterHandler("profile", profileHandler)
 
 	return node
 }
 
-func (n *Node) RegisterHandler(namespace string, handler handlers.Handler) {
+func (n *Node) RegisterHandler(namespace string, handler rpc.Handler) {
 	log.Println(fmt.Sprintf("Registering handlers for namespace: %s", namespace))
 
 	protocolRequest := helpers.GenerateProtocolIDRequest(namespace, handler.Version())

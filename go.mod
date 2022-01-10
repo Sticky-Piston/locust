@@ -3,6 +3,7 @@ module locust
 go 1.16
 
 require (
+	github.com/blevesearch/bleve/v2 v2.3.0 // indirect
 	github.com/dgraph-io/badger v1.6.2 // indirect
 	github.com/dgraph-io/badger/v3 v3.2103.2 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
