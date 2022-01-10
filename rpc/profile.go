@@ -48,7 +48,7 @@ func (h *ProfileHandler) Request(s network.Stream) {
 		return
 	}
 
-	// TODO IMPLEMENT PROFILE STORAGE
+	// TODO: IMPLEMENT PROFILE STORAGE
 	profile := &generated.ProfileResponse{
 		MessageData: h.host.NewMessageData(uuid.New().String(), false),
 		Title:       "Test titel",
@@ -61,7 +61,7 @@ func (h *ProfileHandler) Request(s network.Stream) {
 		return
 	}
 
-	log.Println("Send profile to:", s.Conn().RemotePeer())
+	log.Println("Send profile request to:", s.Conn().RemotePeer())
 }
 
 func (h *ProfileHandler) Response(s network.Stream) {

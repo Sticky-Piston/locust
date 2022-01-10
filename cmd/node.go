@@ -33,10 +33,13 @@ to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
 		// open a new index
 		mapping := bleve.NewIndexMapping()
-		index, err := bleve.New("/tmp/locust.bleve", mapping)
+		index, err := bleve.Open(database)
 		if err != nil {
-			log.Fatal(err)
-			return
+			bleve.New(database, mapping)
+		}
+
+		if index == nil {
+			log.Fatal("index is nil")
 		}
 
 		bleveProfileRepository.NewBleveProfileRepository(&index)
@@ -89,7 +92,7 @@ func init() {
 
 	nodeCmd.Flags().StringVarP(&peerString, "peer", "p", "", "Peer to connect to")
 	nodeCmd.Flags().StringVarP(&rendezvous, "rendezvous", "r", "locust/network", "Rendezvous string")
-	nodeCmd.Flags().StringVarP(&database, "database", "d", "/tmp/locust", "Badger database file location")
+	nodeCmd.Flags().StringVarP(&database, "database", "d", "/tmp/locust.bleve", "Badger database file location")
 
 	// Here you will define your flags and configuration settings.
 

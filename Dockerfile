@@ -1,22 +1,26 @@
-# Builder
-FROM golang:latest
+# # Builder
+FROM golang:latest as build
 
 RUN apt-get -y update && apt-get -y upgrade
 
 COPY . /build
 
 WORKDIR /build
-RUN go build
+
+RUN go mod download
+RUN make build
 
 # Distribution
 FROM debian:latest
 
-RUN apt-get -y update && apt-get -y upgrade
+WORKDIR /
 
-WORKDIR /app 
+COPY --from=build /build/locust /locust
 
-EXPOSE 9090
+#RUN go mod download
 
-COPY --from=builder /build/locust ./locust
+#RUN make build
 
-CMD ./locust
+#USER nonroot:nonroot
+
+ENTRYPOINT ./locust node

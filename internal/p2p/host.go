@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"locust/protocols/generated"
 	"log"
+	"net"
 	"time"
 
 	ggio "github.com/gogo/protobuf/io"
@@ -33,7 +34,15 @@ func NewHost() (P2PHost, error) {
 		return P2PHost{}, err
 	}
 
-	listen, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
+	conn, err := net.Dial("udp", "8.8.8.8:80")
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer conn.Close()
+
+	localAddr := conn.LocalAddr().(*net.UDPAddr)
+
+	listen, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, 0))
 	if err != nil {
 		log.Fatal(err)
 		return P2PHost{}, err
