@@ -105,7 +105,7 @@ func (h *ProfileHandler) Response(s network.Stream) {
 		return
 	}
 
-	log.Printf("%s: Received echo response from %s. Message id:%s. Message: %s.", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.MessageData.Id, data.Payload)
+	log.Printf("%s: Received profile response from %s. Message id:%s. Message: %s.", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.MessageData.Id, data.Payload)
 }
 
 func (h *ProfileHandler) Version() string {

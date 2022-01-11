@@ -32,6 +32,7 @@ func (r bleveProfileRepository) GetProfileByPeerID(peerID string) (domain.Profil
 
 	log.Println(document)
 
+	// TODO unmarshal bleve stuff
 	return domain.Profile{}, nil
 }
 

@@ -85,8 +85,6 @@ to quickly create a Cobra application.`,
 			Message:     fmt.Sprintf("Profile request from %s", node.ID()),
 		}
 
-		log.Println(req)
-
 		// sign the data
 		signature, err := node.SignProtoMessage(req)
 		if err != nil {
@@ -102,47 +100,9 @@ to quickly create a Cobra application.`,
 			return
 		}
 
-		// store ref request so response handler has access to it
-		//p.requests[req.MessageData.Id] = req
-		log.Printf("%s: Profile request to: %s was sent. Message Id: %s, Message: %s", node.ID(), peer.ID, req.MessageData.Id, req.Message)
+		//log.Printf("%s: Profile request to: %s was sent. Message Id: %s, Message: %s", node.ID(), peer.ID, req.MessageData.Id, req.Message)
 
-		time.Sleep(30 * time.Second)
-
-		// // TODO: handle errors :)
-		// priv, _, _ := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
-		// listen, _ := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))
-		// host, _ := libp2p.New(
-		// 	libp2p.ListenAddrs(listen),
-		// 	libp2p.Identity(priv),
-		// 	libp2p.Security(noise.ID, noise.New),
-		// )
-
-		// node := p2p.NewNode(host)
-
-		// log.Printf("Host ID: %s", node.ID().Pretty())
-		// log.Printf("Connect to me on:")
-		// for _, addr := range node.Addrs() {
-		// 	log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
-		// }
-
-		// ctx := context.Background()
-
-		// var discoveryPeers utility.AddrList
-		// discoveryPeers.Set(peerString)
-
-		// dht, err := p2p.NewDHT(ctx, node, discoveryPeers)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-
-		// go p2p.Discover(ctx, node, dht, rendezvous)
-
-		// peerAddr, err := peer.AddrInfoFromString(peerString)
-		// if err != nil {
-		// 	log.Fatal(err)
-		// }
-
-		// node.ProfileProtocol.GetProfileFromPeer(peerAddr)
+		time.Sleep(5 * time.Second)
 	},
 }
 
