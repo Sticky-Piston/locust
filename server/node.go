@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"locust/domain"
 	"locust/internal/helpers"
 	"locust/internal/p2p"
 	"locust/rpc"
@@ -14,10 +15,10 @@ type Node struct {
 	*p2p.P2PHost
 }
 
-func NewNode(host *p2p.P2PHost) *Node {
+func NewNode(host *p2p.P2PHost, profileUseCase domain.ProfileUsecase) *Node {
 	node := &Node{P2PHost: host}
 
-	profileHandler := rpc.NewProfileHandler(node.P2PHost)
+	profileHandler := rpc.NewProfileHandler(node.P2PHost, profileUseCase)
 	node.RegisterHandler("profile", profileHandler)
 
 	return node

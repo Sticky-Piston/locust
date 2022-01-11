@@ -5,6 +5,21 @@ Copyright © 2022 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"context"
+	"fmt"
+	"locust/internal/helpers"
+	"locust/internal/p2p"
+	"locust/protocols/generated"
+	"locust/server"
+	"locust/service/profile"
+	bleveProfileRepository "locust/service/profile/repository/bleve"
+	"log"
+	"time"
+
+	"github.com/blevesearch/bleve/v2"
+	"github.com/google/uuid"
+	"github.com/libp2p/go-libp2p-core/peer"
+	"github.com/libp2p/go-libp2p-core/protocol"
 	"github.com/spf13/cobra"
 )
 
@@ -19,6 +34,80 @@ Cobra is a CLI library for Go that empowers applications.
 This application is a tool to generate the needed files
 to quickly create a Cobra application.`,
 	Run: func(cmd *cobra.Command, args []string) {
+		// open a new index
+		mapping := bleve.NewIndexMapping()
+		index, err := bleve.Open(database)
+		if err != nil {
+			bleve.New(database, mapping)
+		}
+
+		if index == nil {
+			log.Fatal("index is nil")
+		}
+
+		bleveProfileRepository := bleveProfileRepository.NewBleveProfileRepository(index)
+		profileUsecase := profile.NewProfileUsecase(bleveProfileRepository)
+
+		host, err := p2p.NewHost()
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+		node := server.NewNode(&host, profileUsecase)
+
+		log.Printf("Host ID: %s", node.ID().Pretty())
+		log.Printf("Connect to me on:")
+		for _, addr := range node.Addrs() {
+			log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
+		}
+
+		ctx := context.Background()
+		//defer cancel()
+
+		var discoveryPeers helpers.AddrList
+		discoveryPeers.Set(peerString)
+
+		dht, err := server.NewDHT(ctx, node, discoveryPeers)
+		if err != nil {
+			log.Fatal(err)
+		}
+
+		go server.Discover(ctx, node, dht, rendezvous)
+
+		peer, err := peer.AddrInfoFromString(peerString)
+		if err != nil {
+			log.Fatal(err)
+			return
+		}
+
+		req := &generated.ProfileGetRequest{
+			MessageData: node.NewMessageData(uuid.New().String(), false),
+			Message:     fmt.Sprintf("Profile request from %s", node.ID()),
+		}
+
+		log.Println(req)
+
+		// sign the data
+		signature, err := node.SignProtoMessage(req)
+		if err != nil {
+			log.Println("failed to sign pb data")
+			return
+		}
+
+		// add the signature to the message
+		req.MessageData.Sign = signature
+
+		ok := node.SendProtoMessage(peer.ID, protocol.ID(helpers.GenerateProtocolIDRequest("profile", "0.0.1")), req)
+		if !ok {
+			return
+		}
+
+		// store ref request so response handler has access to it
+		//p.requests[req.MessageData.Id] = req
+		log.Printf("%s: Profile request to: %s was sent. Message Id: %s, Message: %s", node.ID(), peer.ID, req.MessageData.Id, req.Message)
+
+		time.Sleep(30 * time.Second)
+
 		// // TODO: handle errors :)
 		// priv, _, _ := crypto.GenerateKeyPair(crypto.Secp256k1, 256)
 		// listen, _ := ma.NewMultiaddr(fmt.Sprintf("/ip4/127.0.0.1/tcp/%d", 0))

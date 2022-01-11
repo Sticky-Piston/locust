@@ -2,31 +2,36 @@ package rpc
 
 import (
 	"io/ioutil"
+	"locust/domain"
+	"locust/internal/helpers"
 	"locust/internal/p2p"
 	"locust/protocols/generated"
 	"log"
 
 	"github.com/google/uuid"
 	"github.com/libp2p/go-libp2p-core/network"
+	"github.com/libp2p/go-libp2p-core/protocol"
 	"google.golang.org/protobuf/proto"
 )
 
 const profileVersion = "0.0.1"
 
 type ProfileHandler struct {
-	host *p2p.P2PHost
+	Usecase domain.ProfileUsecase
+	host    *p2p.P2PHost
 }
 
-func NewProfileHandler(host *p2p.P2PHost) Handler {
+func NewProfileHandler(host *p2p.P2PHost, usecase domain.ProfileUsecase) Handler {
 	return &ProfileHandler{
-		host: host,
+		Usecase: usecase,
+		host:    host,
 	}
 }
 
 func (h *ProfileHandler) Request(s network.Stream) {
 	log.Println("executing a Profile Request")
 
-	data := &generated.ProfileRequest{}
+	data := &generated.ProfileGetRequest{}
 	buf, err := ioutil.ReadAll(s)
 	if err != nil {
 		s.Reset()
@@ -48,14 +53,27 @@ func (h *ProfileHandler) Request(s network.Stream) {
 		return
 	}
 
-	// TODO: IMPLEMENT PROFILE STORAGE
-	profile := &generated.ProfileResponse{
-		MessageData: h.host.NewMessageData(uuid.New().String(), false),
-		Title:       "Test titel",
-		Summary:     "Test summary",
+	profile, err := h.Usecase.GetProfile()
+	if err != nil {
+		log.Println(err)
+		return
 	}
 
-	ok := h.host.SendProtoMessage(s.Conn().RemotePeer(), profileVersion, profile)
+	profileMessage := &generated.ProfileGetResponse{
+		MessageData: h.host.NewMessageData(uuid.New().String(), false),
+		Author:      profile.Author,
+		Payload:     profile.Payload,
+	}
+
+	signature, err := h.host.SignProtoMessage(profileMessage)
+	if err != nil {
+		log.Println("failed to sign response")
+		return
+	}
+
+	profileMessage.MessageData.Sign = signature
+
+	ok := h.host.SendProtoMessage(s.Conn().RemotePeer(), protocol.ID(helpers.GenerateProtocolIDResponse("profile", h.Version())), profileMessage)
 	if !ok {
 		log.Println("Failed to send message")
 		return
@@ -66,6 +84,28 @@ func (h *ProfileHandler) Request(s network.Stream) {
 
 func (h *ProfileHandler) Response(s network.Stream) {
 	log.Println("executing a Profile Reponse")
+
+	data := &generated.ProfileGetResponse{}
+	buf, err := ioutil.ReadAll(s)
+	if err != nil {
+		s.Reset()
+		log.Println(err)
+		return
+	}
+	s.Close()
+
+	err = proto.Unmarshal(buf, data)
+	if err != nil {
+		log.Println(err)
+		return
+	}
+	valid := h.host.AuthenticateMessage(data, data.MessageData)
+	if !valid {
+		log.Println("Failed to authenticate message")
+		return
+	}
+
+	log.Printf("%s: Received echo response from %s. Message id:%s. Message: %s.", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.MessageData.Id, data.Payload)
 }
 
 func (h *ProfileHandler) Version() string {

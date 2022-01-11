@@ -13,7 +13,7 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 	var routingDiscovery = discovery.NewRoutingDiscovery(dht)
 	discovery.Advertise(ctx, routingDiscovery, rendezvous)
 
-	ticker := time.NewTicker(time.Second * 1)
+	ticker := time.NewTicker(time.Second * 10)
 	defer ticker.Stop()
 
 	for {
@@ -40,6 +40,5 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 				}
 			}
 		}
-
 	}
 }

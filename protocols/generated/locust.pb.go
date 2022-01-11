@@ -32,7 +32,7 @@ type MessageData struct {
 	Id            string `protobuf:"bytes,3,opt,name=id,proto3" json:"id,omitempty"`                       // allows requesters to use request data when processing a response
 	Gossip        bool   `protobuf:"varint,4,opt,name=gossip,proto3" json:"gossip,omitempty"`              // true to have receiver peer gossip the message to neighbors
 	NodeId        string `protobuf:"bytes,5,opt,name=nodeId,proto3" json:"nodeId,omitempty"`               // id of node that created the message (not the peer that may have sent it). =base58(multihash(nodePubKey))
-	NodePubKey    []byte `protobuf:"bytes,6,opt,name=nodePubKey,proto3" json:"nodePubKey,omitempty"`       // Authoring node Secp256k1 public key (32bytes) - protobufs serielized
+	NodePubKey    []byte `protobuf:"bytes,6,opt,name=nodePubKey,proto3" json:"nodePubKey,omitempty"`       // Authoring node Secp256k1 public key (32bytes) - protobufs serialized
 	Sign          []byte `protobuf:"bytes,7,opt,name=sign,proto3" json:"sign,omitempty"`                   // signature of message data + method specific data by message authoring node.
 }
 
@@ -117,17 +117,17 @@ func (x *MessageData) GetSign() []byte {
 	return nil
 }
 
-type ProfileRequest struct {
+type Topic struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
-	Message     string       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Topic       string       `protobuf:"bytes,2,opt,name=topic,proto3" json:"topic,omitempty"`
 }
 
-func (x *ProfileRequest) Reset() {
-	*x = ProfileRequest{}
+func (x *Topic) Reset() {
+	*x = Topic{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_protocols_locust_proto_msgTypes[1]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -135,13 +135,13 @@ func (x *ProfileRequest) Reset() {
 	}
 }
 
-func (x *ProfileRequest) String() string {
+func (x *Topic) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ProfileRequest) ProtoMessage() {}
+func (*Topic) ProtoMessage() {}
 
-func (x *ProfileRequest) ProtoReflect() protoreflect.Message {
+func (x *Topic) ProtoReflect() protoreflect.Message {
 	mi := &file_protocols_locust_proto_msgTypes[1]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -153,37 +153,36 @@ func (x *ProfileRequest) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ProfileRequest.ProtoReflect.Descriptor instead.
-func (*ProfileRequest) Descriptor() ([]byte, []int) {
+// Deprecated: Use Topic.ProtoReflect.Descriptor instead.
+func (*Topic) Descriptor() ([]byte, []int) {
 	return file_protocols_locust_proto_rawDescGZIP(), []int{1}
 }
 
-func (x *ProfileRequest) GetMessageData() *MessageData {
+func (x *Topic) GetMessageData() *MessageData {
 	if x != nil {
 		return x.MessageData
 	}
 	return nil
 }
 
-func (x *ProfileRequest) GetMessage() string {
+func (x *Topic) GetTopic() string {
 	if x != nil {
-		return x.Message
+		return x.Topic
 	}
 	return ""
 }
 
-type ProfileResponse struct {
+type ProfileGetRequest struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
 	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
-	Title       string       `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`
-	Summary     string       `protobuf:"bytes,3,opt,name=summary,proto3" json:"summary,omitempty"`
+	Message     string       `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
 }
 
-func (x *ProfileResponse) Reset() {
-	*x = ProfileResponse{}
+func (x *ProfileGetRequest) Reset() {
+	*x = ProfileGetRequest{}
 	if protoimpl.UnsafeEnabled {
 		mi := &file_protocols_locust_proto_msgTypes[2]
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -191,13 +190,13 @@ func (x *ProfileResponse) Reset() {
 	}
 }
 
-func (x *ProfileResponse) String() string {
+func (x *ProfileGetRequest) String() string {
 	return protoimpl.X.MessageStringOf(x)
 }
 
-func (*ProfileResponse) ProtoMessage() {}
+func (*ProfileGetRequest) ProtoMessage() {}
 
-func (x *ProfileResponse) ProtoReflect() protoreflect.Message {
+func (x *ProfileGetRequest) ProtoReflect() protoreflect.Message {
 	mi := &file_protocols_locust_proto_msgTypes[2]
 	if protoimpl.UnsafeEnabled && x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
@@ -209,30 +208,204 @@ func (x *ProfileResponse) ProtoReflect() protoreflect.Message {
 	return mi.MessageOf(x)
 }
 
-// Deprecated: Use ProfileResponse.ProtoReflect.Descriptor instead.
-func (*ProfileResponse) Descriptor() ([]byte, []int) {
+// Deprecated: Use ProfileGetRequest.ProtoReflect.Descriptor instead.
+func (*ProfileGetRequest) Descriptor() ([]byte, []int) {
 	return file_protocols_locust_proto_rawDescGZIP(), []int{2}
 }
 
-func (x *ProfileResponse) GetMessageData() *MessageData {
+func (x *ProfileGetRequest) GetMessageData() *MessageData {
 	if x != nil {
 		return x.MessageData
 	}
 	return nil
 }
 
-func (x *ProfileResponse) GetTitle() string {
+func (x *ProfileGetRequest) GetMessage() string {
 	if x != nil {
-		return x.Title
+		return x.Message
 	}
 	return ""
 }
 
-func (x *ProfileResponse) GetSummary() string {
+type ProfileGetResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
+	Author      string       `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`
+	Payload     string       `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
+}
+
+func (x *ProfileGetResponse) Reset() {
+	*x = ProfileGetResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocols_locust_proto_msgTypes[3]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileGetResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileGetResponse) ProtoMessage() {}
+
+func (x *ProfileGetResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protocols_locust_proto_msgTypes[3]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileGetResponse.ProtoReflect.Descriptor instead.
+func (*ProfileGetResponse) Descriptor() ([]byte, []int) {
+	return file_protocols_locust_proto_rawDescGZIP(), []int{3}
+}
+
+func (x *ProfileGetResponse) GetMessageData() *MessageData {
 	if x != nil {
-		return x.Summary
+		return x.MessageData
+	}
+	return nil
+}
+
+func (x *ProfileGetResponse) GetAuthor() string {
+	if x != nil {
+		return x.Author
 	}
 	return ""
+}
+
+func (x *ProfileGetResponse) GetPayload() string {
+	if x != nil {
+		return x.Payload
+	}
+	return ""
+}
+
+type ProfileSubmitRequest struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MessageData *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
+	Author      string       `protobuf:"bytes,2,opt,name=author,proto3" json:"author,omitempty"`
+	Payload     string       `protobuf:"bytes,3,opt,name=payload,proto3" json:"payload,omitempty"`
+}
+
+func (x *ProfileSubmitRequest) Reset() {
+	*x = ProfileSubmitRequest{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocols_locust_proto_msgTypes[4]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileSubmitRequest) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileSubmitRequest) ProtoMessage() {}
+
+func (x *ProfileSubmitRequest) ProtoReflect() protoreflect.Message {
+	mi := &file_protocols_locust_proto_msgTypes[4]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileSubmitRequest.ProtoReflect.Descriptor instead.
+func (*ProfileSubmitRequest) Descriptor() ([]byte, []int) {
+	return file_protocols_locust_proto_rawDescGZIP(), []int{4}
+}
+
+func (x *ProfileSubmitRequest) GetMessageData() *MessageData {
+	if x != nil {
+		return x.MessageData
+	}
+	return nil
+}
+
+func (x *ProfileSubmitRequest) GetAuthor() string {
+	if x != nil {
+		return x.Author
+	}
+	return ""
+}
+
+func (x *ProfileSubmitRequest) GetPayload() string {
+	if x != nil {
+		return x.Payload
+	}
+	return ""
+}
+
+type ProfileSubmitResponse struct {
+	state         protoimpl.MessageState
+	sizeCache     protoimpl.SizeCache
+	unknownFields protoimpl.UnknownFields
+
+	MessageData  *MessageData `protobuf:"bytes,1,opt,name=messageData,proto3" json:"messageData,omitempty"`
+	Acknowledged bool         `protobuf:"varint,2,opt,name=acknowledged,proto3" json:"acknowledged,omitempty"`
+}
+
+func (x *ProfileSubmitResponse) Reset() {
+	*x = ProfileSubmitResponse{}
+	if protoimpl.UnsafeEnabled {
+		mi := &file_protocols_locust_proto_msgTypes[5]
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		ms.StoreMessageInfo(mi)
+	}
+}
+
+func (x *ProfileSubmitResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*ProfileSubmitResponse) ProtoMessage() {}
+
+func (x *ProfileSubmitResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_protocols_locust_proto_msgTypes[5]
+	if protoimpl.UnsafeEnabled && x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use ProfileSubmitResponse.ProtoReflect.Descriptor instead.
+func (*ProfileSubmitResponse) Descriptor() ([]byte, []int) {
+	return file_protocols_locust_proto_rawDescGZIP(), []int{5}
+}
+
+func (x *ProfileSubmitResponse) GetMessageData() *MessageData {
+	if x != nil {
+		return x.MessageData
+	}
+	return nil
+}
+
+func (x *ProfileSubmitResponse) GetAcknowledged() bool {
+	if x != nil {
+		return x.Acknowledged
+	}
+	return false
 }
 
 var File_protocols_locust_proto protoreflect.FileDescriptor
@@ -252,23 +425,45 @@ var file_protocols_locust_proto_rawDesc = []byte{
 	0x06, 0x6e, 0x6f, 0x64, 0x65, 0x49, 0x64, 0x12, 0x1e, 0x0a, 0x0a, 0x6e, 0x6f, 0x64, 0x65, 0x50,
 	0x75, 0x62, 0x4b, 0x65, 0x79, 0x18, 0x06, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x0a, 0x6e, 0x6f, 0x64,
 	0x65, 0x50, 0x75, 0x62, 0x4b, 0x65, 0x79, 0x12, 0x12, 0x0a, 0x04, 0x73, 0x69, 0x67, 0x6e, 0x18,
-	0x07, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x73, 0x69, 0x67, 0x6e, 0x22, 0x64, 0x0a, 0x0e, 0x50,
-	0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x38, 0x0a,
-	0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01,
-	0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2e, 0x4d,
-	0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73,
-	0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61,
-	0x67, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67,
-	0x65, 0x22, 0x7b, 0x0a, 0x0f, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x52, 0x65, 0x73, 0x70,
-	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
+	0x07, 0x20, 0x01, 0x28, 0x0c, 0x52, 0x04, 0x73, 0x69, 0x67, 0x6e, 0x22, 0x57, 0x0a, 0x05, 0x54,
+	0x6f, 0x70, 0x69, 0x63, 0x12, 0x38, 0x0a, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
 	0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x65, 0x6e, 0x65,
 	0x72, 0x61, 0x74, 0x65, 0x64, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74,
 	0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x14,
-	0x0a, 0x05, 0x74, 0x69, 0x74, 0x6c, 0x65, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,
-	0x69, 0x74, 0x6c, 0x65, 0x12, 0x18, 0x0a, 0x07, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x18,
-	0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x73, 0x75, 0x6d, 0x6d, 0x61, 0x72, 0x79, 0x42, 0x0d,
-	0x5a, 0x0b, 0x2e, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x62, 0x06, 0x70,
-	0x72, 0x6f, 0x74, 0x6f, 0x33,
+	0x0a, 0x05, 0x74, 0x6f, 0x70, 0x69, 0x63, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x05, 0x74,
+	0x6f, 0x70, 0x69, 0x63, 0x22, 0x67, 0x0a, 0x11, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x47,
+	0x65, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x38, 0x0a, 0x0b, 0x6d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16,
+	0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
+	0x61, 0x74, 0x61, 0x12, 0x18, 0x0a, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x18, 0x02,
+	0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x22, 0x80, 0x01,
+	0x0a, 0x12, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x47, 0x65, 0x74, 0x52, 0x65, 0x73, 0x70,
+	0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38, 0x0a, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
+	0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x65, 0x6e, 0x65,
+	0x72, 0x61, 0x74, 0x65, 0x64, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74,
+	0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x16,
+	0x0a, 0x06, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x18, 0x02, 0x20, 0x01, 0x28, 0x09, 0x52, 0x06,
+	0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61,
+	0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x70, 0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64,
+	0x22, 0x82, 0x01, 0x0a, 0x14, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65, 0x53, 0x75, 0x62, 0x6d,
+	0x69, 0x74, 0x52, 0x65, 0x71, 0x75, 0x65, 0x73, 0x74, 0x12, 0x38, 0x0a, 0x0b, 0x6d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20, 0x01, 0x28, 0x0b, 0x32, 0x16,
+	0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2e, 0x4d, 0x65, 0x73, 0x73, 0x61,
+	0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44,
+	0x61, 0x74, 0x61, 0x12, 0x16, 0x0a, 0x06, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x18, 0x02, 0x20,
+	0x01, 0x28, 0x09, 0x52, 0x06, 0x61, 0x75, 0x74, 0x68, 0x6f, 0x72, 0x12, 0x18, 0x0a, 0x07, 0x70,
+	0x61, 0x79, 0x6c, 0x6f, 0x61, 0x64, 0x18, 0x03, 0x20, 0x01, 0x28, 0x09, 0x52, 0x07, 0x70, 0x61,
+	0x79, 0x6c, 0x6f, 0x61, 0x64, 0x22, 0x75, 0x0a, 0x15, 0x50, 0x72, 0x6f, 0x66, 0x69, 0x6c, 0x65,
+	0x53, 0x75, 0x62, 0x6d, 0x69, 0x74, 0x52, 0x65, 0x73, 0x70, 0x6f, 0x6e, 0x73, 0x65, 0x12, 0x38,
+	0x0a, 0x0b, 0x6d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x18, 0x01, 0x20,
+	0x01, 0x28, 0x0b, 0x32, 0x16, 0x2e, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x2e,
+	0x4d, 0x65, 0x73, 0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x52, 0x0b, 0x6d, 0x65, 0x73,
+	0x73, 0x61, 0x67, 0x65, 0x44, 0x61, 0x74, 0x61, 0x12, 0x22, 0x0a, 0x0c, 0x61, 0x63, 0x6b, 0x6e,
+	0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x64, 0x18, 0x02, 0x20, 0x01, 0x28, 0x08, 0x52, 0x0c,
+	0x61, 0x63, 0x6b, 0x6e, 0x6f, 0x77, 0x6c, 0x65, 0x64, 0x67, 0x65, 0x64, 0x42, 0x0d, 0x5a, 0x0b,
+	0x2e, 0x2f, 0x67, 0x65, 0x6e, 0x65, 0x72, 0x61, 0x74, 0x65, 0x64, 0x62, 0x06, 0x70, 0x72, 0x6f,
+	0x74, 0x6f, 0x33,
 }
 
 var (
@@ -283,20 +478,26 @@ func file_protocols_locust_proto_rawDescGZIP() []byte {
 	return file_protocols_locust_proto_rawDescData
 }
 
-var file_protocols_locust_proto_msgTypes = make([]protoimpl.MessageInfo, 3)
+var file_protocols_locust_proto_msgTypes = make([]protoimpl.MessageInfo, 6)
 var file_protocols_locust_proto_goTypes = []interface{}{
-	(*MessageData)(nil),     // 0: generated.MessageData
-	(*ProfileRequest)(nil),  // 1: generated.ProfileRequest
-	(*ProfileResponse)(nil), // 2: generated.ProfileResponse
+	(*MessageData)(nil),           // 0: generated.MessageData
+	(*Topic)(nil),                 // 1: generated.Topic
+	(*ProfileGetRequest)(nil),     // 2: generated.ProfileGetRequest
+	(*ProfileGetResponse)(nil),    // 3: generated.ProfileGetResponse
+	(*ProfileSubmitRequest)(nil),  // 4: generated.ProfileSubmitRequest
+	(*ProfileSubmitResponse)(nil), // 5: generated.ProfileSubmitResponse
 }
 var file_protocols_locust_proto_depIdxs = []int32{
-	0, // 0: generated.ProfileRequest.messageData:type_name -> generated.MessageData
-	0, // 1: generated.ProfileResponse.messageData:type_name -> generated.MessageData
-	2, // [2:2] is the sub-list for method output_type
-	2, // [2:2] is the sub-list for method input_type
-	2, // [2:2] is the sub-list for extension type_name
-	2, // [2:2] is the sub-list for extension extendee
-	0, // [0:2] is the sub-list for field type_name
+	0, // 0: generated.Topic.messageData:type_name -> generated.MessageData
+	0, // 1: generated.ProfileGetRequest.messageData:type_name -> generated.MessageData
+	0, // 2: generated.ProfileGetResponse.messageData:type_name -> generated.MessageData
+	0, // 3: generated.ProfileSubmitRequest.messageData:type_name -> generated.MessageData
+	0, // 4: generated.ProfileSubmitResponse.messageData:type_name -> generated.MessageData
+	5, // [5:5] is the sub-list for method output_type
+	5, // [5:5] is the sub-list for method input_type
+	5, // [5:5] is the sub-list for extension type_name
+	5, // [5:5] is the sub-list for extension extendee
+	0, // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_protocols_locust_proto_init() }
@@ -318,7 +519,7 @@ func file_protocols_locust_proto_init() {
 			}
 		}
 		file_protocols_locust_proto_msgTypes[1].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProfileRequest); i {
+			switch v := v.(*Topic); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -330,7 +531,43 @@ func file_protocols_locust_proto_init() {
 			}
 		}
 		file_protocols_locust_proto_msgTypes[2].Exporter = func(v interface{}, i int) interface{} {
-			switch v := v.(*ProfileResponse); i {
+			switch v := v.(*ProfileGetRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protocols_locust_proto_msgTypes[3].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileGetResponse); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protocols_locust_proto_msgTypes[4].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileSubmitRequest); i {
+			case 0:
+				return &v.state
+			case 1:
+				return &v.sizeCache
+			case 2:
+				return &v.unknownFields
+			default:
+				return nil
+			}
+		}
+		file_protocols_locust_proto_msgTypes[5].Exporter = func(v interface{}, i int) interface{} {
+			switch v := v.(*ProfileSubmitResponse); i {
 			case 0:
 				return &v.state
 			case 1:
@@ -348,7 +585,7 @@ func file_protocols_locust_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: file_protocols_locust_proto_rawDesc,
 			NumEnums:      0,
-			NumMessages:   3,
+			NumMessages:   6,
 			NumExtensions: 0,
 			NumServices:   0,
 		},

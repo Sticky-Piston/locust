@@ -10,6 +10,7 @@ import (
 	"locust/internal/helpers"
 	"locust/internal/p2p"
 	"locust/server"
+	"locust/service/profile"
 	bleveProfileRepository "locust/service/profile/repository/bleve"
 	"log"
 	"os"
@@ -42,14 +43,15 @@ to quickly create a Cobra application.`,
 			log.Fatal("index is nil")
 		}
 
-		bleveProfileRepository.NewBleveProfileRepository(&index)
+		bleveProfileRepository := bleveProfileRepository.NewBleveProfileRepository(index)
+		profileUsecase := profile.NewProfileUsecase(bleveProfileRepository)
 
 		host, err := p2p.NewHost()
 		if err != nil {
 			log.Fatal(err)
 			return
 		}
-		node := server.NewNode(&host)
+		node := server.NewNode(&host, profileUsecase)
 
 		log.Printf("Host ID: %s", node.ID().Pretty())
 		log.Printf("Connect to me on:")

@@ -156,5 +156,7 @@ func (n *P2PHost) SendProtoMessage(id peer.ID, p protocol.ID, data proto.Message
 		return false
 	}
 
+	log.Println("Wrote message")
+
 	return true
 }
