@@ -53,13 +53,8 @@ to quickly create a Cobra application.`,
 			log.Fatal(err)
 			return
 		}
-		node := server.NewNode(&host, profileUsecase)
 
-		log.Printf("Host ID: %s", node.ID().Pretty())
-		log.Printf("Connect to me on:")
-		for _, addr := range node.Addrs() {
-			log.Printf("  %s/p2p/%s", addr, node.ID().Pretty())
-		}
+		node := server.NewNode(&host, profileUsecase)
 
 		ctx := context.Background()
 		//defer cancel()
@@ -67,12 +62,12 @@ to quickly create a Cobra application.`,
 		var discoveryPeers helpers.AddrList
 		discoveryPeers.Set(peerString)
 
-		dht, err := server.NewDHT(ctx, node, discoveryPeers)
+		dht, err := server.NewDHT(ctx, host, discoveryPeers)
 		if err != nil {
 			log.Fatal(err)
 		}
 
-		go server.Discover(ctx, node, dht, rendezvous)
+		go server.Discover(ctx, host, dht, rendezvous)
 
 		peer, err := peer.AddrInfoFromString(peerString)
 		if err != nil {
@@ -81,12 +76,12 @@ to quickly create a Cobra application.`,
 		}
 
 		req := &generated.ProfileGetRequest{
-			MessageData: node.NewMessageData(uuid.New().String(), false),
+			MessageData: host.NewMessageData(uuid.New().String(), false),
 			Message:     fmt.Sprintf("Profile request from %s", node.ID()),
 		}
 
 		// sign the data
-		signature, err := node.SignProtoMessage(req)
+		signature, err := host.SignProtoMessage(req)
 		if err != nil {
 			log.Println("failed to sign pb data")
 			return
@@ -95,7 +90,7 @@ to quickly create a Cobra application.`,
 		// add the signature to the message
 		req.MessageData.Sign = signature
 
-		ok := node.SendProtoMessage(peer.ID, protocol.ID(helpers.GenerateProtocolIDRequest("profile", "0.0.1")), req)
+		ok := host.SendProtoMessage(peer.ID, protocol.ID(helpers.GenerateProtocolIDRequest("profile", "0.0.1")), req)
 		if !ok {
 			return
 		}

@@ -5,16 +5,15 @@ import (
 	"log"
 	"sync"
 
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/peer"
 	disc "github.com/libp2p/go-libp2p-discovery"
 	dht "github.com/libp2p/go-libp2p-kad-dht"
 	"github.com/multiformats/go-multiaddr"
 )
 
-func NewDHT(ctx context.Context, node *Node, bootstrapPeers []multiaddr.Multiaddr) (*disc.RoutingDiscovery, error) {
+func NewDHT(ctx context.Context, host host.Host, bootstrapPeers []multiaddr.Multiaddr) (*disc.RoutingDiscovery, error) {
 	var options []dht.Option
-
-	host := node.Host
 
 	if len(bootstrapPeers) == 0 {
 		options = append(options, dht.Mode(dht.ModeServer))

@@ -5,11 +5,12 @@ import (
 	"log"
 	"time"
 
+	"github.com/libp2p/go-libp2p-core/host"
 	"github.com/libp2p/go-libp2p-core/network"
 	discovery "github.com/libp2p/go-libp2p-discovery"
 )
 
-func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, rendezvous string) {
+func Discover(ctx context.Context, host host.Host, dht *discovery.RoutingDiscovery, rendezvous string) {
 	var routingDiscovery = discovery.NewRoutingDiscovery(dht)
 	discovery.Advertise(ctx, routingDiscovery, rendezvous)
 
@@ -27,14 +28,14 @@ func Discover(ctx context.Context, node *Node, dht *discovery.RoutingDiscovery, 
 			}
 
 			for _, peer := range peers {
-				if peer.ID == node.ID() {
+				if peer.ID == host.ID() {
 					continue
 				}
 
-				if node.Network().Connectedness(peer.ID) != network.Connected {
-					_, err = node.Network().DialPeer(ctx, peer.ID)
+				if host.Network().Connectedness(peer.ID) != network.Connected {
+					_, err = host.Network().DialPeer(ctx, peer.ID)
 					if err != nil {
-						node.Peerstore().RemovePeer(peer.ID)
+						host.Peerstore().RemovePeer(peer.ID)
 						continue
 					}
 				}
