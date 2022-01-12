@@ -22,12 +22,17 @@ require (
 	github.com/libp2p/go-libp2p-interface-pnet v0.0.1 // indirect
 	github.com/libp2p/go-libp2p-kad-dht v0.15.0 // indirect
 	github.com/libp2p/go-libp2p-metrics v0.0.1 // indirect
+	github.com/libp2p/go-libp2p-mplex v0.4.1 // indirect
 	github.com/libp2p/go-libp2p-net v0.0.2 // indirect
 	github.com/libp2p/go-libp2p-noise v0.3.0 // indirect
+	github.com/libp2p/go-libp2p-quic-transport v0.15.2 // indirect
 	github.com/libp2p/go-libp2p-routing v0.0.1 // indirect
 	github.com/libp2p/go-libp2p-transport v0.0.4 // indirect
+	github.com/libp2p/go-libp2p-webrtc-direct v0.0.0-20211119141901-debf5b323743 // indirect
+	github.com/libp2p/go-tcp-transport v0.4.0 // indirect
 	github.com/libp2p/go-testutil v0.0.1 // indirect
 	github.com/multiformats/go-multiaddr v0.4.0 // indirect
+	github.com/pion/webrtc/v3 v3.0.16 // indirect
 	github.com/spacemonkeygo/openssl v0.0.0-20181017203307-c2dcc5cca94a // indirect
 	github.com/spf13/cobra v1.3.0 // indirect
 	github.com/whyrusleeping/base32 v0.0.0-20170828182744-c30ac30633cc // indirect

@@ -66,7 +66,7 @@ to quickly create a Cobra application.`,
 
 		dht, err := server.NewDHT(ctx, node, discoveryPeers)
 		if err != nil {
-			log.Fatal(err)
+			log.Println(err)
 		}
 
 		go server.Discover(ctx, node, dht, rendezvous)

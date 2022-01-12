@@ -13,11 +13,14 @@ import (
 	"github.com/libp2p/go-libp2p"
 	"github.com/libp2p/go-libp2p-core/crypto"
 	"github.com/libp2p/go-libp2p-core/host"
+	"github.com/libp2p/go-libp2p-core/metrics"
 	"github.com/libp2p/go-libp2p-core/peer"
 	"github.com/libp2p/go-libp2p-core/protocol"
+	mplex "github.com/libp2p/go-libp2p-mplex"
 	noise "github.com/libp2p/go-libp2p-noise"
-
-	ma "github.com/multiformats/go-multiaddr"
+	direct "github.com/libp2p/go-libp2p-webrtc-direct"
+	"github.com/libp2p/go-tcp-transport"
+	"github.com/pion/webrtc/v3"
 )
 
 const clientVersion = "locust/0.0.1"
@@ -42,16 +45,27 @@ func NewHost() (P2PHost, error) {
 
 	localAddr := conn.LocalAddr().(*net.UDPAddr)
 
-	listen, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, 0))
-	if err != nil {
-		log.Fatal(err)
-		return P2PHost{}, err
-	}
+	// listen, err := ma.NewMultiaddr(fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, 0))
+	// if err != nil {
+	// 	log.Fatal(err)
+	// 	return P2PHost{}, err
+	// }
+
+	transports := libp2p.ChainOptions(
+		libp2p.Transport(tcp.NewTCPTransport),
+		libp2p.Transport(direct.NewTransport(webrtc.Configuration{},
+			new(mplex.Transport))),
+	)
 
 	host, err := libp2p.New(
-		libp2p.ListenAddrs(listen),
+		libp2p.ListenAddrStrings(
+			fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, 0),
+			fmt.Sprintf("/ip4/%s/tcp/%d/http/p2p-webrtc-direct", localAddr.IP, 0),
+		),
+		transports,
 		libp2p.Identity(priv),
 		libp2p.Security(noise.ID, noise.New),
+		libp2p.BandwidthReporter(metrics.NewBandwidthCounter()),
 	)
 	if err != nil {
 		log.Fatal(err)
