@@ -62,7 +62,7 @@ func (h *ProfileHandler) Request(s network.Stream) {
 	profileMessage := &generated.ProfileGetResponse{
 		MessageData: h.host.NewMessageData(uuid.New().String(), false),
 		Author:      profile.Author,
-		Payload:     profile.Payload,
+		Summary:     profile.Summary,
 	}
 
 	signature, err := h.host.SignProtoMessage(profileMessage)
@@ -105,7 +105,7 @@ func (h *ProfileHandler) Response(s network.Stream) {
 		return
 	}
 
-	log.Printf("%s: Received profile response from %s. Message id:%s. Message: %s.", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.MessageData.Id, data.Payload)
+	log.Printf("%s: Received profile response from %s. Message id:%s. Message: %s.", s.Conn().LocalPeer(), s.Conn().RemotePeer(), data.MessageData.Id, data.Summary)
 }
 
 func (h *ProfileHandler) Version() string {

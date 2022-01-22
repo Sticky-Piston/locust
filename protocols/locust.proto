@@ -31,7 +31,9 @@ message ProfileGetResponse {
     MessageData messageData = 1;
 
     string author = 2;
-    string payload = 3;
+    string title = 3;
+    string summary = 4;
+    repeated string skills = 5;
 }
 
 message ProfileSubmitRequest {

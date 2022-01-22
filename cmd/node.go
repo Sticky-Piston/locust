@@ -46,7 +46,7 @@ to quickly create a Cobra application.`,
 		bleveProfileRepository := bleveProfileRepository.NewBleveProfileRepository(index)
 		profileUsecase := profile.NewProfileUsecase(bleveProfileRepository)
 
-		host, err := p2p.NewHost()
+		host, err := p2p.NewHost(seed)
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -71,6 +71,12 @@ to quickly create a Cobra application.`,
 
 		go server.Discover(ctx, node, dht, rendezvous)
 
+		// create a new PubSub service using the GossipSub router
+		// ps, err := pubsub.NewGossipSub(ctx, host)
+		// if err != nil {
+		// 	panic(err)
+		// }
+
 		c := make(chan os.Signal, 1)
 
 		signal.Notify(c, os.Interrupt, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM)
@@ -85,7 +91,6 @@ to quickly create a Cobra application.`,
 		}
 
 		os.Exit(0)
-
 	},
 }
 

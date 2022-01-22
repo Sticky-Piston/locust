@@ -1,7 +1,9 @@
 package domain
 
 type Profile struct {
-	Payload string
+	Title   string
+	Summary string
+	Skills  []string
 	Author  string
 }
 

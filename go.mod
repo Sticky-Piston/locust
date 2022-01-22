@@ -25,6 +25,7 @@ require (
 	github.com/libp2p/go-libp2p-mplex v0.4.1 // indirect
 	github.com/libp2p/go-libp2p-net v0.0.2 // indirect
 	github.com/libp2p/go-libp2p-noise v0.3.0 // indirect
+	github.com/libp2p/go-libp2p-pubsub v0.6.0 // indirect
 	github.com/libp2p/go-libp2p-quic-transport v0.15.2 // indirect
 	github.com/libp2p/go-libp2p-routing v0.0.1 // indirect
 	github.com/libp2p/go-libp2p-transport v0.0.4 // indirect
@@ -35,6 +36,7 @@ require (
 	github.com/pion/webrtc/v3 v3.0.16 // indirect
 	github.com/spacemonkeygo/openssl v0.0.0-20181017203307-c2dcc5cca94a // indirect
 	github.com/spf13/cobra v1.3.0 // indirect
+	github.com/spf13/viper v1.10.0 // indirect
 	github.com/whyrusleeping/base32 v0.0.0-20170828182744-c30ac30633cc // indirect
 	github.com/whyrusleeping/go-notifier v0.0.0-20170827234753-097c5d47330f // indirect
 	github.com/whyrusleeping/go-smux-multiplex v3.0.16+incompatible // indirect

@@ -20,7 +20,7 @@ func NewBleveProfileRepository(index bleve.Index) domain.ProfileRepository {
 func (r bleveProfileRepository) GetProfile() (domain.Profile, error) {
 	return domain.Profile{
 		Author:  "blaat",
-		Payload: "blaat",
+		Summary: "blaat",
 	}, nil
 }
 
