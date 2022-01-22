@@ -3,6 +3,7 @@ version: "3.8"
 services:
   locust-bootstrap:
     image: pwnintended/locust:latest
+    entrypoint: ./locust node --seed "compose_seed_fwefwefwef453453453453453" --port 9000
     networks:
       - locust
     deploy:
@@ -15,7 +16,7 @@ services:
     depends_on:
       - locust-bootstrap
     image: pwnintended/locust:latest
-    entrypoint: ./locust node
+    entrypoint: ./locust node -p /ip4/172.24.0.2/tcp/9000/p2p/12D3KooWBuCo5DrTC9RarS3e6qPX2bEg5yBRZaFppGfC26BPioPV
     networks:
       - locust
     deploy:

@@ -46,7 +46,7 @@ to quickly create a Cobra application.`,
 		bleveProfileRepository := bleveProfileRepository.NewBleveProfileRepository(index)
 		profileUsecase := profile.NewProfileUsecase(bleveProfileRepository)
 
-		host, err := p2p.NewHost(seed)
+		host, err := p2p.NewHost(seed, port)
 		if err != nil {
 			log.Fatal(err)
 			return

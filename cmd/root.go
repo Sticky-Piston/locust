@@ -19,6 +19,7 @@ var (
 	database   string
 	configDir  string
 	seed       string
+	port       int
 )
 
 // rootCmd represents the base command when called without any subcommands
@@ -61,6 +62,7 @@ func init() {
 
 	rootCmd.PersistentFlags().StringVar(&configDir, "config", "", "config directory (default is $HOME/.locust/)")
 	rootCmd.PersistentFlags().StringVar(&seed, "seed", "", "seed to generate keypair with")
+	rootCmd.PersistentFlags().IntVar(&port, "port", 0, "port to listen on")
 }
 
 func initConfig() {

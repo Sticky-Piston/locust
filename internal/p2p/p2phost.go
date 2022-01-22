@@ -30,7 +30,7 @@ type P2PHost struct {
 	host.Host
 }
 
-func NewHost(seed string) (P2PHost, error) {
+func NewHost(seed string, port int) (P2PHost, error) {
 	log.Println(viper.AllKeys())
 
 	h := sha512.New()
@@ -68,7 +68,7 @@ func NewHost(seed string) (P2PHost, error) {
 
 	host, err := libp2p.New(
 		libp2p.ListenAddrStrings(
-			fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, 0),
+			fmt.Sprintf("/ip4/%s/tcp/%d", localAddr.IP, port),
 			//fmt.Sprintf("/ip4/%s/tcp/%d/http/p2p-webrtc-direct", localAddr.IP, 0),
 		),
 		transports,
